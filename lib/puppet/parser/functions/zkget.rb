@@ -22,6 +22,7 @@ module Puppet::Parser::Functions
                 server. Error was: #{e}"
             # Just return false if zk is unavailable?
             #return false
+        end
 
         def fail(data)
           raise Puppet::ParseError, "Could not retreive at least [#{min}] servers
@@ -59,8 +60,6 @@ module Puppet::Parser::Functions
         ensure
             zk.close!
         end
-
-
     end
 end
 
