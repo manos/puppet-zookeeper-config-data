@@ -1,5 +1,13 @@
-Using puppet-zookeeper, an example
-----------------------------------
+Current status: development, testing. Not ready for use.
+
+
+
+---
+
+
+
+Using puppet-zookeeper
+----------------------
 
 Functions available in puppet, provided by this module:
 ```
