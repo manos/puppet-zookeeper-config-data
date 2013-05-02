@@ -97,7 +97,7 @@ will not be deregistered in the setup used in the example. And the only way to
 remove it, would be to call zkdel() because puppet knows it's no longer valid -
 but this works against the purpose of removing *configuration data* from puppet.
 
-This module was inspired by [https://github.com/Nextdoor/puppet_zkwatcher/][],
+This module was inspired by [https://github.com/Nextdoor/puppet_zkwatcher/],
 which uses a python daemon to (de)register nodes. This, too, requires a box to be up,
 to notice the service is down, and de-register.
 
