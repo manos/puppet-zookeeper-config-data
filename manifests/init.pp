@@ -8,7 +8,7 @@
 class zk_puppet inherits zk_puppet::params {
 
     # gems these parser functions require:
-    package { ['timeout', 'zk',]:
+    package { ['zk',]:
         ensure   => installed,
         provider => gem,
     }
