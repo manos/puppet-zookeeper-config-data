@@ -5,7 +5,7 @@
 # This class installs the pre-requisites.
 # See the lib/ directory for the goodies, and README.md for usage.
 #
-class puppet_zookeeper {
+class zk_puppet inherits zk_params {
 
     # gems these parser functions require:
     package { ['timeout', 'zk',]:
