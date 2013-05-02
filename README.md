@@ -45,9 +45,9 @@ facts, if you pass the argument as facter:ipaddress.
 
 Put that information in zookeeper:
 ```puppet
-zkput("/puppet/services/haproxy_${site_name}/${::hostname}", facter:hostname)
-zkput("/puppet/services/haproxy_${site_name}/${::hostname}/ip", facter:ipaddr)
-zkput("/puppet/services/haproxy_${site_name}/${::hostname}/port", $port)
+zkput("/puppet/services/haproxy/${site_name}/${::hostname}", facter:hostname)
+zkput("/puppet/services/haproxy/${site_name}/${::hostname}/ip", facter:ipaddr)
+zkput("/puppet/services/haproxy/${site_name}/${::hostname}/port", $port)
 ```
 
 Now that the data is written to zookeeper, the haproxy class can use it to
@@ -56,7 +56,7 @@ name
 
 in haproxy::backend, for example
 ```puppet
-$servers = zkget("/puppet/services/haproxy_${site_name}", 0, 'children')
+$servers = zkget("/puppet/services/haproxy/${site_name}", 0, 'children')
 ```
 
 $servers is now an array, containing a list of servers. But you'll need to get
@@ -66,9 +66,10 @@ to call.
 
 So call haproxy::backend::server_line { $servers: site_name => $site_name }, and in it,
 get the parameters you expect, and write the server line in your config (using concat)!
-```
-$ip = zkget(/puppet/services/haproxy_site1/$server/ip)
-$port = zkget(/puppet/services/haproxy_site1/$server/port)
+```puppet
+$server = $name
+$ip = zkget("/puppet/services/haproxy/${site_name}/${server}/ip", 1)
+$port = zkget("/puppet/services/haproxy/${site_name}/${server}/port", 1)
 ```
 
 The 2nd argument is min values. If the ip or port returned nothing from zookeeper, 
