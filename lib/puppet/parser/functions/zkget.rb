@@ -1,4 +1,5 @@
 require 'thread'
+require 'rubygems'
 require 'zk'
 require 'timeout'
 
