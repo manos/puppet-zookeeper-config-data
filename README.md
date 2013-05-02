@@ -54,9 +54,9 @@ zkput("/puppet/services/haproxy/${site_name}/${::hostname}/ip", $::ipaddr)
 zkput("/puppet/services/haproxy/${site_name}/${::hostname}/port", $port)
 ```
 
-Now that the data is written to zookeeper, the haproxy class can use it to
-construct its config. You'll want to call a define from ::register, with the site
-name
+Now that the data is written to zookeeper in a format the haproxy class expects
+(this is why I used created haproxy::register), the haproxy class can use it to
+construct its config.
 
 in haproxy::backend, for example
 ```puppet
@@ -77,7 +77,7 @@ $ip   = zkget("/puppet/services/haproxy/${site_name}/${server}/ip", 1)
 $port = zkget("/puppet/services/haproxy/${site_name}/${server}/port", 1)
 ```
 
-The 2nd argument is min values. If the ip or port returned nothing from zookeeper, 
+The 2nd argument is min values. If the ip or port returned nothing from zookeeper,
 compilation would fail. If you don't specify a min, zkget can return false, so be
 sure to check for that.
 ```puppet
@@ -87,4 +87,16 @@ concat::fragment { $service_name:
     order   => 7,
 }
 ```
+
+NB
+---
+This is just one example - haproxy is the reason I wrote this module.
+Basically, anything you do in puppet, that has hard-coded server lists (or other
+config data), can be moved to zookeeper. 
+
+Why zookeeper?
+
+Since stored configs / exported resources in puppet are horrible, and I was 
+already running a production zookeeper ensemble for storm, this was a natural 
+evolution :)
 
