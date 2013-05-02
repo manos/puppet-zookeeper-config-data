@@ -72,13 +72,14 @@ So call haproxy::backend::server_line { $servers: site_name => $site_name }, and
 get the parameters you expect, and write the server line in your config (using concat)!
 ```puppet
 include zk_puppet
-$server    = $name
+$server = $name
 $ip   = zkget("/puppet/services/haproxy/${site_name}/${server}/ip", 1)
 $port = zkget("/puppet/services/haproxy/${site_name}/${server}/port", 1)
 ```
 
 The 2nd argument is min values. If the ip or port returned nothing from zookeeper, 
-compilation would fail.
+compilation would fail. If you don't specify a min, zkget can return false, so be
+sure to check for that.
 ```puppet
 concat::fragment { $service_name:
     target  => $conf,
@@ -86,6 +87,4 @@ concat::fragment { $service_name:
     order   => 7,
 }
 ```
-NB: if either ip or port were missing from zk, they would be set to false (we didn't
-specify min or max args). So check before using.
 
