@@ -29,7 +29,7 @@ haproxy class shouldn't know anything about the class (server list) that's calle
 
 In an haproxy::register class, you take the parameters you need. Say, ip and port.
 ```puppet
-definte haproxy::register($ip, $port) { $site_name = $name }
+define haproxy::register($ip, $port) { $site_name = $name }
 ```
 
 Now, parser functions run on the puppet master. But zkget and zkput can use facter
