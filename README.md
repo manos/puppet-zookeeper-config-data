@@ -88,15 +88,38 @@ concat::fragment { $service_name:
 }
 ```
 
+TODO: Removing Data
+--------------------
+zkdel() is coming soon, so you can manage zk nodes completely from within puppet.
+
+This is slightly problematic, in the haproxy use case. If a server disappears, it
+will not be deregistered in the setup used in the example. And the only way to
+remove it, would be to call zkdel() because puppet knows it's no longer valid -
+but this works against the purpose of removing *configuration data* from puppet.
+
+This module was inspired by [https://github.com/Nextdoor/puppet_zkwatcher/][],
+which uses a python daemon to (de)register nodes. This, too, requires a box to be up,
+to notice the service is down, and de-register.
+
+I'll probably write a watcher for specific purposes, that checks the server lists
+(children in the tree below $site_name, from the above example), and removes non-responsive
+ones daily. That's good enough, as haproxy won't send data to down backends anyway.
+
+In fact, zkdel() can take an argument to remove anything with a timestamp older
+than N time (and leave a minimum number of nodes).
+The zkput() function *does* currently re-write the data on every puppet run. So
+that's going to work nicely.
+
+
 NB
 ---
 This is just one example - haproxy is the reason I wrote this module.
 Basically, anything you do in puppet, that has hard-coded server lists (or other
-config data), can be moved to zookeeper. 
+config data), can be moved to zookeeper.
 
 Why zookeeper?
 
-Since stored configs / exported resources in puppet are horrible, and I was 
-already running a production zookeeper ensemble for storm, this was a natural 
+Since stored configs / exported resources in puppet are horrible, and I was
+already running a production zookeeper ensemble for storm, this was a natural
 evolution :)
 
