@@ -13,7 +13,8 @@ module Puppet::Parser::Functions
         end
 
         begin
-            Timeout.timeout 30 do
+            max_wait = lookupvar('zk_timeout').exists || 30
+            Timeout.timeout max_wait do
                 zk = ZK.new(lookupvar('zkserver')+':'+lookupvar('port'))
             end
         rescue Exception=>e
