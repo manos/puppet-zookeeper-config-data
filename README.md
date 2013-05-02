@@ -6,11 +6,12 @@
 
 
 
-Using puppet-zookeeper
-----------------------
+Using zk-puppet
+---------------
 
 Functions available in puppet, provided by this module:
 ```puppet
+include zk_puppet
 zkget('/path', 1, 'data') # returns data at path, with min=1 values returned.
                           # optional 3rd arg is either 'data' or 'children', to
                           # fetch either the data at `path`, or an array of its children
@@ -19,6 +20,7 @@ zkput('/path', 'stuff')   # writes the string 'stuff' at path. Will create znode
 ```
 
 To use these functions, you *must* have defined two variables in the current scope:
+(either include zk_puppet and edit params.pp, or take care of this yourself)
 $zk_server
 $zk_port
 
