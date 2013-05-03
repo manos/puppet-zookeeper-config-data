@@ -19,10 +19,10 @@ zkput('/path', 'stuff')   # writes the string 'stuff' at path. Will create znode
                           # in path if required (mkdir -p), and overwrites any data at path
 ```
 
-To use these functions, you *must* have defined two variables in the current scope:
-(either include zk_puppet and edit params.pp, or take care of this yourself)
-$zk_server
-$zk_port
+To use these functions, you *must* have defined two variables as facts (sorry).
+edit lib/facter/zk_conf.rb and set the values for zk_server and zk_port. This is
+the only way custom functions can access variables - they must be facts. If you
+don't use facts, just hardcode these values in zkput.rb and zkconf.rb.
 
 These functions store zk data as persistent, non-sequential, and overwrites any
 existing data at the specified node.
@@ -44,7 +44,7 @@ define haproxy::register($ip, $port) { $site_name = $name }
 
 Remember, parser functions run on the puppet master (so it needs access to your
 zookeeper server). But arguments to zkget and zkput are parsed in the catalog
-compilations *for* a host, so $::hostname, $::fqdn, etc are valid to use.
+compilations *for* a host, so $::hostname, $::fqdn, or any fact are valid to use.
 
 Put that information in zookeeper:
 ```puppet
