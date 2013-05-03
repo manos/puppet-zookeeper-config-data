@@ -7,7 +7,7 @@ module Puppet::Parser::Functions
         data = args[1].to_s
 
         begin
-            zk = ZK.new(lookupvar('zkserver')+':'+lookupvar('port'))
+            zk = ZK.new(lookupvar('zk_server')+':'+lookupvar('zk_port'))
         rescue Exception=>e
             # Fail catalog if zk is unavailable?
             raise Puppet::ParseError, "Timeout or error connecting to zookeeper server. Error was: #{e}"
