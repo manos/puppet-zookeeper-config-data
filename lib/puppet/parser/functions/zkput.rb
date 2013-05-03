@@ -3,7 +3,7 @@ require 'zk'
 require 'timeout'
 
 module Puppet::Parser::Functions
-    newfunction(:zkput, :type => :rvalue) do |args|
+    newfunction(:zkput) do |args|
         path = args[0]
         data = args[1].to_s
 

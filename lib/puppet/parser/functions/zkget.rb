@@ -4,7 +4,7 @@ require 'zk'
 require 'timeout'
 
 module Puppet::Parser::Functions
-    newfunction(:zkget) do |args|
+    newfunction(:zkget, :type => :rvalue) do |args|
         path = args[0]
         min = args[1].to_i
         if args.len > 2
