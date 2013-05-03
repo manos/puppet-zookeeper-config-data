@@ -15,10 +15,6 @@ module Puppet::Parser::Functions
             #return false
         end
 
-        def fail(data)
-          raise Puppet::ParseError, "Could not retreive at least [#{min}] servers from ZooKeeper at path [#{path}]. Returned data was: [#{servers}]."
-        end
-
         begin
             # write the data at the path. The option :set will overwrite what's
             # there, and create all children nodes as necessary.
