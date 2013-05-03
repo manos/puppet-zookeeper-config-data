@@ -2,9 +2,6 @@
 # This is probably a bad place to age out data (at puppet catalog compilation),
 # but here it is.
 #
-# zkdel('/path', 86400) will delete the znode at path, if data hasn't changed in
-# 86400 seconds.
-#
 require 'rubygems'
 require 'zk'
 
@@ -12,6 +9,10 @@ module Puppet::Parser::Functions
     newfunction(:zkdel) do |args|
         path = args[0]
         mtime = args[1].to_s
+        if args.length > 2
+            parent_path = args[2]
+            min_nodes = args[3].to_i
+        end
 
         begin
             zk = ZK.new(lookupvar('zk_server')+':'+lookupvar('zk_port'))
@@ -26,14 +27,32 @@ module Puppet::Parser::Functions
 
             node = zk.stat(path)
 
+            if defined?(parent_path)
+                parent_node = zk.stat(path)
+                if not parent_node.numChildren - 1 < min_nodes
+                    return false
+                end
+            end
+
             if stat.mtime.to_i < Time.now.to_i - mtime
-                zk.delete(path, :ignore => [:no_node,:not_empty])
+                begin
+                    zk.delete(path, :ignore => :no_node)
+                rescue ZK::Exceptions::NotEmpty
+                    # it has children. What to do? Should probably traverse the tree,
+                    # and recursively delete all nodes. For now, delete all kids and try again.
+                    kids = zk.children(path)
+                    for kid in kids
+                        zk.delete(path+'/'+kid, :ignore => [:no_node,:not_empty])
+                        zk.delete(path, :ignore => :no_node)
+                    end
+                end
+            else
+                return false
             end
 
         ensure
             zk.close!
         end
-
     end
 end
 

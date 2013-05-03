@@ -12,12 +12,16 @@ Using zk-puppet
 Functions available in puppet, provided by this module:
 ```puppet
 include zk_puppet
-zkget('/path', 1, 'data') # returns data at path, with min=1 values returned.
-                          # optional 3rd arg is either 'data' or 'children', to
-                          # fetch either the data at `path`, or an array of its children
-zkput('/path', 'stuff')   # writes the string 'stuff' at path. Will create znodes
-                          # in path if required (mkdir -p), and overwrites any data at path
-zkdel('/path', 86400)     # deletes the node at 'path' if its mtime is > 86400 seconds old
+zkget('/path', 1, ['data']) # returns data at path, with min=1 values returned.
+                            # optional 3rd arg is either 'data' or 'children', to
+                            # fetch either the data at `path`, or an array of its children
+zkput('/path', 'stuff')     # writes the string 'stuff' at path. Will create znodes
+                            # in path if required (mkdir -p), and overwrites any data at path
+                            #
+zkdel('/path/foo', 86400, ['/path', 1])
+                          # deletes the node '/path/foo' if its mtime is >
+                          # 86400 seconds old. Optional args are: iff '/path' will still
+                          # contain >= 1 children after the deletion.
 ```
 
 To use these functions, you *must* have defined two variables as facts (sorry).
@@ -104,7 +108,7 @@ to notice the service is down, and de-register.
 
 I'll probably write a watcher for specific purposes, that checks the server lists
 (children in the tree below $site_name, from the above example), and removes non-responsive
-ones daily. That's good enough, as haproxy won't send data to down backends anyway.
+ones daily. That's good enough, as haproxy won't send requests to down backends anyway.
 
 In fact, zkdel() can take an argument to remove anything with a timestamp older
 than N time (and leave a minimum number of nodes).
