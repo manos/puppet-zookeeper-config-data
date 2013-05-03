@@ -1,4 +1,4 @@
-**Current status: development, testing. Not ready for use.**
+**Current status: development, working. Alpha quality.**
 
 
 
