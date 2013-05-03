@@ -17,6 +17,7 @@ zkget('/path', 1, 'data') # returns data at path, with min=1 values returned.
                           # fetch either the data at `path`, or an array of its children
 zkput('/path', 'stuff')   # writes the string 'stuff' at path. Will create znodes
                           # in path if required (mkdir -p), and overwrites any data at path
+zkdel('/path', 86400)     # deletes the node at 'path' if its mtime is > 86400
 ```
 
 To use these functions, you *must* have defined two variables as facts (sorry).
