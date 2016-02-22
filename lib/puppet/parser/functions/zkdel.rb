@@ -8,7 +8,7 @@ require 'zk'
 module Puppet::Parser::Functions
     newfunction(:zkdel) do |args|
         path = args[0]
-        mtime = args[1].to_s
+        mtime = args[1].to_i
         if args.length > 2
             parent_path = args[2]
             min_nodes = args[3].to_i
