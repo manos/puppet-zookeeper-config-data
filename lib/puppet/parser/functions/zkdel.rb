@@ -34,7 +34,7 @@ module Puppet::Parser::Functions
                 end
             end
 
-            if stat.mtime.to_i < Time.now.to_i - mtime
+            if node.mtime.to_i < Time.now.to_i - mtime
                 begin
                     zk.delete(path, :ignore => :no_node)
                 rescue ZK::Exceptions::NotEmpty
