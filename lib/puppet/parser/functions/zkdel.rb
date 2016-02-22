@@ -12,6 +12,8 @@ module Puppet::Parser::Functions
         if args.length > 2
             parent_path = args[2]
             min_nodes = args[3].to_i
+        else
+            parent_path = nil
         end
 
         begin
@@ -27,7 +29,7 @@ module Puppet::Parser::Functions
 
             node = zk.stat(path)
 
-            if defined?(parent_path)
+            if ! parent_path.nil?
                 parent_node = zk.stat(path)
                 if not parent_node.numChildren - 1 < min_nodes
                     return false
