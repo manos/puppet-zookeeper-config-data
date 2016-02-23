@@ -6,6 +6,22 @@
 
 
 
+##Installation
+Go to the modules folder and type:
+```
+# git clone https://github.com/manos/puppet-zookeeper-config-data.git zk_puppet
+```
+
+When including the puppet class, the gem 'zk' should be installed automatically, but it does require these additional packages on the OS:
+* ruby-devel
+* patch
+* gcc
+
+If the gem still won't install properly, make sure the correct gem is used. A puppet master supplies it's own gem executable. So on a puppet master the 'zk' gem needs to be installed manually:
+```
+# /opt/puppetlabs/puppet/bin/gem install zk
+```
+
 Using zk-puppet
 ---------------
 
