@@ -30,9 +30,19 @@ module Puppet::Parser::Functions
             # Stopping the puppet run is good enough for me.
 
             if type == 'data'
-                data = zk.get(path).first
+                begin
+                    data = zk.get(path).first
+                rescue ZK::Exceptions::NoNode
+                    #NoNode? return empty string
+                    data = String.new
+                end
             elsif type == 'children'
-                data= zk.children(path)
+                begin
+                    data= zk.children(path)
+                rescue ZK::Exceptions::NoNode
+                    #NoNode? return empty string
+                    data = String.new
+                end
             else
                 raise Puppet::ParseError, "Unknown type of get: #{type}"
             end
