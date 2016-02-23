@@ -8,10 +8,12 @@ require 'zk'
 module Puppet::Parser::Functions
     newfunction(:zkdel) do |args|
         path = args[0]
-        mtime = args[1].to_s
+        mtime = args[1].to_i
         if args.length > 2
             parent_path = args[2]
             min_nodes = args[3].to_i
+        else
+            parent_path = nil
         end
 
         begin
@@ -27,14 +29,14 @@ module Puppet::Parser::Functions
 
             node = zk.stat(path)
 
-            if defined?(parent_path)
+            if ! parent_path.nil?
                 parent_node = zk.stat(path)
                 if not parent_node.numChildren - 1 < min_nodes
                     return false
                 end
             end
 
-            if stat.mtime.to_i < Time.now.to_i - mtime
+            if node.mtime.to_i < (Time.now.to_i * 1000) - mtime
                 begin
                     zk.delete(path, :ignore => :no_node)
                 rescue ZK::Exceptions::NotEmpty
