@@ -13,4 +13,9 @@ class zk_puppet {
         provider => gem,
     }
 
+    $additional_packages = [ 'ruby-devel', 'patch', 'gcc' ]
+    package { $additional_packages:
+        ensure => present,
+        before => Package['zk']
+    }
 }
