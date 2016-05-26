@@ -12,7 +12,7 @@ Go to the modules folder and type:
 # git clone https://github.com/manos/puppet-zookeeper-config-data.git zk_puppet
 ```
 
-When including the puppet class, the gem 'zk' should be installed automatically, but it does require these additional packages on the OS:
+When including the puppet class, the gem 'zk' should be installed automatically, but it does require these additional packages on the OS (these packages are installed when you include this zk_puppet class):
 * ruby-devel
 * patch
 * gcc
